@@ -15,12 +15,9 @@ python manage.py makemigrations
 python manage.py migrate
 
 python manage.py runserver
-# curl http://127.0.0.1:8000/
+# curl http://127.0.0.1:7900/
 
 ./manage.py test
-
-# save a vendor test file as ~/tmp/z1.txt
-curl --verbose "http://localhost:8000/api/recon/js?qb_file=qb123&vendor_file=z1.txt"
 
 # security
 * Disabled admin

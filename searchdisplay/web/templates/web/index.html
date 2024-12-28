@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h1>Document Search App</h1>
+<input type="text" id="searchBox" placeholder="Enter search string">
+<button onclick="searchDocuments()">Search</button>
+
+<ul id="resultList">
+</ul>
+
+<textarea id="selectedText" rows="10" cols="50" readonly></textarea>
+
+<div id="originalDocumentDisplay" style="border:1px solid black; height:400px; width:600px; overflow:auto;">
+    <iframe id="documentViewer" style="width:100%; height:100%;" frameborder="0"></iframe>
+</div>
+
+<script>
+    function searchDocuments() {
+        const query = document.getElementById('searchBox').value;
+        fetch(`/search?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultList = document.getElementById('resultList');
+                resultList.innerHTML = '';
+
+                data.results.forEach(result => {
+                    const li = document.createElement('li');
+                    li.textContent = result.original_filename;
+                    li.onclick = () => {
+                        document.getElementById('selectedText').value = result.converted_text;
+                        document.getElementById('documentViewer').src = `/media/${result.full_path}`;
+                    };
+                    resultList.appendChild(li);
+                });
+            });
+    }
+</script>
+
+{% endblock %}   

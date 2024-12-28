@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['RECON_SECRET_KEY']
+SECRET_KEY = os.environ['SD_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,6 +31,11 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'api.apps.ApiConfig',
+    'web.apps.WebConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,3 +126,68 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "{asctime} {levelname:^8s} {thread:d} {lineno:^4d}:{filename} {module}.{funcName}: {message}",
+            'style': '{',
+        },
+        'simple': {
+            'format': '{asctime} {levelname:^8s} {module} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'svrnamefilter': {
+            '()': 'searchdisplay.loggingfilter.HostnameFilter',
+        },
+    },
+    'handlers': {
+        'console': {
+            'filters': ['svrnamefilter'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'filters': ['svrnamefilter'],
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': './logs/logs_from_settings_filehandler.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'sdlogger': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        }
+    }
+}
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
