@@ -48,3 +48,17 @@ def get_documents(request):
 
 def create(request):
     pass
+
+
+def search(request):
+    query = request.GET.get('query', '')
+    results = Document.objects.filter(text__icontains=query)
+    results_data = [
+        {
+            "id": result.id,
+            "original_filename": result.filename,
+            "converted_text": result.text,
+            "full_path": result.full_path
+        } for result in results
+    ]
+    return JsonResponse({"results": results_data})

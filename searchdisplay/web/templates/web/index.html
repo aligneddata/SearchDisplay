@@ -1,26 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Search and Display{% endblock %}
 
 {% block content %}
 
-<h1>Document Search App</h1>
-<input type="text" id="searchBox" placeholder="Enter search string">
-<button onclick="searchDocuments()">Search</button>
+<div>
+    <!-- <input type="text" id="searchBox" placeholder="Enter search string"> -->
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-default">Enter search string</span>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+        id="searchBox">
+        <button type="button" class="btn btn-primary" onclick="searchDocuments()">Search</button>
+    </div>
+    <!-- <button onclick="searchDocuments()">Search</button> -->
+</div>
 
-<ul id="resultList">
+<ul id="resultList" class="list-group">
 </ul>
 
-<textarea id="selectedText" rows="10" cols="50" readonly></textarea>
+<textarea id="selectedText" rows="5" class="form-control" readonly></textarea>
 
-<div id="originalDocumentDisplay" style="border:1px solid black; height:400px; width:600px; overflow:auto;">
-    <iframe id="documentViewer" style="width:100%; height:100%;" frameborder="0"></iframe>
+<div>
+    <img id="documentViewer" src="#" class="img-fluid" alt="">
 </div>
 
 <script>
     function searchDocuments() {
         const query = document.getElementById('searchBox').value;
-        fetch(`/search?query=${query}`)
+        fetch(`/api/search?query=${query}`)
             .then(response => response.json())
             .then(data => {
                 const resultList = document.getElementById('resultList');
@@ -29,6 +36,7 @@
                 data.results.forEach(result => {
                     const li = document.createElement('li');
                     li.textContent = result.original_filename;
+                    li.className = "list-group-item";
                     li.onclick = () => {
                         document.getElementById('selectedText').value = result.converted_text;
                         document.getElementById('documentViewer').src = `/media/${result.full_path}`;
