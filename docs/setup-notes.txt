@@ -1,0 +1,26 @@
+sudo apt-get install python3-venv
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install django djangorestframework django-sslserver
+django-admin startproject searchdisplay
+cd searchdisplay
+./manage.py startapp api
+./manage.py startapp web
+./manage.py migrate
+# ./manage.py createsuperuser 
+
+# Create models.py under api/
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py runserver
+# curl http://127.0.0.1:8000/
+
+./manage.py test
+
+# save a vendor test file as ~/tmp/z1.txt
+curl --verbose "http://localhost:8000/api/recon/js?qb_file=qb123&vendor_file=z1.txt"
+
+# security
+* Disabled admin
