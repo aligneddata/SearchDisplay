@@ -4,24 +4,32 @@
 
 {% block content %}
 
-<div>
-    <!-- <input type="text" id="searchBox" placeholder="Enter search string"> -->
-    <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default">Enter search string</span>
-        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-        id="searchBox">
-        <button type="button" class="btn btn-primary" onclick="searchDocuments()">Search</button>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Keyword:</span>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+                    id="searchBox">
+                    <button type="button" class="btn btn-primary" onclick="searchDocuments()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <ul id="resultList" class="list-group">
+            </ul>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-6">
+            <textarea id="selectedText" rows="5" class="form-control" readonly></textarea>
+        </div>
     </div>
-    <!-- <button onclick="searchDocuments()">Search</button> -->
-</div>
 
-<ul id="resultList" class="list-group">
-</ul>
-
-<textarea id="selectedText" rows="5" class="form-control" readonly></textarea>
-
-<div>
-    <img id="documentViewer" src="#" class="img-fluid" alt="">
+    <div class="row">
+        <div>
+            <img id="documentViewer" src="#" class="img-fluid" alt="">
+        </div>
+    </div>
 </div>
 
 <script>
