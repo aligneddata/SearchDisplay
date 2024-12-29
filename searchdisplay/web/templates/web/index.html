@@ -8,12 +8,14 @@
     <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-3">
             <div>
-                <div class="input-group">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Keyword:</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-                    id="searchBox">
-                    <button type="button" class="btn btn-primary" onclick="searchDocuments()">Search</button>
-                </div>
+                <form id="searchForm">
+                    <div class="input-group">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Keyword:</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+                        id="searchBox">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
             </div>
             <ul id="resultList" class="list-group">
             </ul>
@@ -49,6 +51,10 @@
                 });
             });
     }
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form's default submission
+        searchDocuments();
+      });
 </script>
 
 {% endblock %}   
