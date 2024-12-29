@@ -1,8 +1,10 @@
+create an env file from docs/HOME_DOT_searchdisplay.env.sh.template
 sudo apt-get install python3-venv
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install django djangorestframework django-sslserver
+pip install -r requirements_python39.txt
 django-admin startproject searchdisplay
 cd searchdisplay
 ./manage.py startapp api
