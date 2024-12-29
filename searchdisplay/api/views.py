@@ -5,7 +5,10 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
 import os
+import logging
 from .models import Document
+
+logger = logging.getLogger('searchdisplay')
 
 @csrf_exempt
 def upload_document(request):
@@ -15,15 +18,17 @@ def upload_document(request):
 
         # Save file to file system
         fs = FileSystemStorage()
-        filename = fs.save(file.name, file)
-        file_path = fs.path(filename)
+        saved_filename = fs.save(file.name, file)  # Get the actual saved filename
+        saved_file_path = fs.path(saved_filename)  # Construct the absolute path
 
+        logging.info("Saved file from [%s] is [%s], where full path [%s]" % 
+                     (file.name, saved_filename, saved_file_path))
         # Create and save document record
         document = Document(
-            original_filename=file.name,
-            document_type=os.path.splitext(file.name)[1][1:],
-            converted_text=converted_text,
-            full_path=file_path
+            filename=saved_filename, #file.name,
+            type=os.path.splitext(file.name)[1][1:],
+            text=converted_text,
+            full_path=saved_file_path
         )
         document.save()
 
@@ -56,7 +61,7 @@ def search(request):
     results_data = [
         {
             "id": result.id,
-            "original_filename": result.filename,
+            "filename": result.filename,
             "converted_text": result.text,
             "full_path": result.full_path
         } for result in results

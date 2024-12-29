@@ -15,7 +15,7 @@ PATH=$PATH:$PWD/venv/bin
 source venv/bin/activate
 cd ${appname}/
 ./manage.py migrate
-#./manage.py runserver 0.0.0.0:7900
-gunicorn --workers 2 --timeout 60 --bind :7900 \
-    ${appname}.wsgi:application
+./manage.py runserver 0.0.0.0:7900
+#gunicorn --workers 2 --timeout 60 --bind :7900 \
+#    ${appname}.wsgi:application
 cd -

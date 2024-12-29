@@ -43,11 +43,11 @@
 
                 data.results.forEach(result => {
                     const li = document.createElement('li');
-                    li.textContent = result.original_filename;
+                    li.textContent = result.filename;
                     li.className = "list-group-item";
                     li.onclick = () => {
                         document.getElementById('selectedText').value = result.converted_text;
-                        document.getElementById('documentViewer').src = `/media/${result.full_path}`;
+                        document.getElementById('documentViewer').src = `/media/${result.filename}`;
                     };
                     resultList.appendChild(li);
                 });
