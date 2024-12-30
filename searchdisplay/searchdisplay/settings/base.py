@@ -195,3 +195,7 @@ REST_FRAMEWORK = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+LOGIN_URL = '/login/'  # Redirect to login page
+LOGIN_REDIRECT_URL = '/'       # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/'      # Redirect after logout
