@@ -4,12 +4,17 @@ from django.views import View
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 import os
 import logging
 from .models import Document
 
 logger = logging.getLogger('searchdisplay')
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 @csrf_exempt
 def upload_document(request):
     if request.method == 'POST':
@@ -36,6 +41,8 @@ def upload_document(request):
     return JsonResponse({"status": "failure", "message": "Invalid request method."})
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_documents(request):
     if request.method == 'GET':
         documents = Document.objects.all()
@@ -51,10 +58,8 @@ def get_documents(request):
         return JsonResponse({"documents": documents_data})
 
 
-def create(request):
-    pass
-
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search(request):
     query = request.GET.get('query', '')
     results = Document.objects.filter(text__icontains=query)
