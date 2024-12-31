@@ -80,7 +80,8 @@ def upload_document_and_text(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# TODOs: temp off. security feature must be added later.
+# @permission_classes([IsAuthenticated])
 def get_documents(request):
     if request.method == 'GET':
         documents = Document.objects.all()
@@ -97,7 +98,8 @@ def get_documents(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# TODOs: temp off. security feature must be added later.
+# @permission_classes([IsAuthenticated])
 def search(request):
     query = request.GET.get('query', '')
     results = Document.objects.filter(text__icontains=query)
