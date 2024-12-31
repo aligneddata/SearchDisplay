@@ -40,6 +40,44 @@ def upload_document(request):
         return JsonResponse({"status": "success", "message": "Document uploaded successfully."})
     return JsonResponse({"status": "failure", "message": "Invalid request method."})
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@csrf_exempt
+def upload_document_and_text(request):
+    if request.method == 'POST':
+        file = request.FILES['file']
+        text = request.FILES['text']
+        # converted_text = request.POST['converted_text']
+
+        # Save file to file system
+        fs = FileSystemStorage()
+        saved_filename = fs.save(file.name, file)  # Get the actual saved filename
+        saved_file_path = fs.path(saved_filename)  # Construct the absolute path
+        logging.info("Saved file from [%s] is [%s], where full path [%s]" %
+                     (file.name, saved_filename, saved_file_path))
+        
+        text_filename = fs.save(text.name, text)
+        text_file_path = fs.path(text_filename)
+
+        logging.info("Saved text from [%s] is [%s], where full path [%s]" %
+                     (text.name, text_filename, text_file_path))
+
+        # Extract concert_text from the uploaded file (replace with your logic)
+        with open(text_file_path, 'r') as f:
+            converted_text = f.read()  # You might need to use specific parsing based on file format
+
+        # Create and save document record
+        document = Document(
+            filename=saved_filename, #file.name,
+            type=os.path.splitext(file.name)[1][1:],
+            text=converted_text,
+            full_path=saved_file_path
+        )
+        document.save()
+
+        return JsonResponse({"status": "success", "message": "Document uploaded successfully."})
+    return JsonResponse({"status": "failure", "message": "Invalid request method."})
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
